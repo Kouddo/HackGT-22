@@ -29,7 +29,6 @@ model.compile(optimizer='adam',
 
 labeldic = {'N': 1, 'D': 2, 'N': 3, 'M': 4, 'O': 5, 'H': 6, 'C': 7, 'A': 8, 'G': 9}
 
-['N', 'D', 'N', 'M', 'O', 'H', 'C', 'A', 'G']
 
 class App(customtkinter.CTk):
 
@@ -39,7 +38,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Monkey.py")
+        self.title("eyeCare.py")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
 
@@ -66,7 +65,7 @@ class App(customtkinter.CTk):
         self.frame_left.grid_rowconfigure(11, minsize=10)  # empty row with minsize as spacing
 
         self.label_1 = customtkinter.CTkLabel(master=self.frame_left,
-                                              text="DARPL",
+                                              text="eyeCare",
                                               text_font=("Roboto Medium", -16))  # font name and size in px
         self.label_1.grid(row=1, column=0, pady=10, padx=10)
 
@@ -142,15 +141,26 @@ class App(customtkinter.CTk):
         print(link)
         print(image.shape)
         x = model.predict(predictions)
-        print(np.max(x))
+        index = x.argmax()
+        diseases = ['Normal', 'Diabetes', 'Normal', 'Pathalogical Myopia', 'Other', 'Hypertension', 'Cataract', 'Age related Macular Degeneration', 'Glaucoma']
+        print(diseases[index])
+        # make a label that displays x
+        self.label_info_1 = customtkinter.CTkLabel(master=self.frame_info,
+                                                    text="The patient had a " + str(index) + " percent chance of having  " + diseases[index],
+                                                    height=100,
+                                                    corner_radius=6,
+                                                    fg_color=("white", "gray38"),
+                                                    justify=tkinter.LEFT)
+        self.label_info_1.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
 
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
 
+
+
     def on_closing(self, event=0):
         self.destroy()
-
 
 if __name__ == "__main__":
     app = App()
